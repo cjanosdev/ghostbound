@@ -1,0 +1,84 @@
+[gd_scene load_steps=7 format=3 uid="uid://bj6whkth4iq0y"]
+
+[ext_resource type="Script" path="res://scripts/HUD.cs" id="1_bcot4"]
+[ext_resource type="Texture2D" uid="uid://cx7doidacytka" path="res://textures/under_healthbar.png" id="2_d2h8m"]
+[ext_resource type="Texture2D" uid="uid://f1ussqpgnee5" path="res://textures/spectral_coin.png" id="2_ju0sp"]
+[ext_resource type="Texture2D" uid="uid://jt8ckie66gt7" path="res://textures/true_empty_healthbar.png" id="3_hd4gl"]
+[ext_resource type="Texture2D" uid="uid://catrisorxd2f5" path="res://textures/green_healthbar.png" id="4_afy3f"]
+[ext_resource type="Texture2D" uid="uid://bbl0hlv03cpu7" path="res://textures/abilityImage.png" id="6_tua3m"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_bcot4")
+
+[node name="TopBar" type="HBoxContainer" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 80.0
+offset_bottom = 100.0
+grow_horizontal = 2
+
+[node name="RoundLabel" type="Label" parent="TopBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 64
+
+[node name="RoundCountdownLabel" type="Label" parent="TopBar"]
+visible = false
+layout_mode = 2
+text = "Round starts in 10..."
+
+[node name="BottomBar" type="HBoxContainer" parent="."]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -128.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+
+[node name="CurrencyDisplay" type="HBoxContainer" parent="BottomBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CurrencyLabel" type="Label" parent="BottomBar/CurrencyDisplay"]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 64
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CoinIcon" type="TextureRect" parent="BottomBar/CurrencyDisplay"]
+layout_mode = 2
+texture = ExtResource("2_ju0sp")
+expand_mode = 3
+
+[node name="HealthBar" type="TextureProgressBar" parent="BottomBar"]
+layout_mode = 2
+size_flags_stretch_ratio = 2.0
+value = 100.0
+texture_under = ExtResource("2_d2h8m")
+texture_over = ExtResource("3_hd4gl")
+texture_progress = ExtResource("4_afy3f")
+
+[node name="AbilityBar" type="HBoxContainer" parent="BottomBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Ability1" type="TextureButton" parent="BottomBar/AbilityBar"]
+layout_mode = 2
+texture_normal = ExtResource("6_tua3m")
+
+[node name="Ability2" type="TextureButton" parent="BottomBar/AbilityBar"]
+layout_mode = 2
+texture_normal = ExtResource("6_tua3m")
+
+[node name="Ability3" type="TextureButton" parent="BottomBar/AbilityBar"]
+layout_mode = 2
+texture_normal = ExtResource("6_tua3m")
+
+[node name="Ability4" type="TextureButton" parent="BottomBar/AbilityBar"]
+layout_mode = 2
+texture_normal = ExtResource("6_tua3m")

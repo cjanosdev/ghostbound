@@ -1,0 +1,133 @@
+[gd_scene load_steps=15 format=3 uid="uid://53gm78f6wjmw"]
+
+[ext_resource type="Script" path="res://scripts/RangedSwarmingEnemy.cs" id="1_nspnv"]
+[ext_resource type="PackedScene" uid="uid://rk28563dwav0" path="res://scenes/FireProjectile.tscn" id="2_e0m01"]
+[ext_resource type="Texture2D" uid="uid://dxsmei6g5vrg" path="res://enemy/enemy_sprite_sheet_no_flame.png" id="2_wes2c"]
+
+[sub_resource type="Gradient" id="Gradient_2m7tg"]
+colors = PackedColorArray(0.800273, 0.624877, 0.985585, 1, 1, 1, 1, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1ten6"]
+atlas = ExtResource("2_wes2c")
+region = Rect2(7, 45, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i5y1c"]
+atlas = ExtResource("2_wes2c")
+region = Rect2(135, 45, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kbrbg"]
+atlas = ExtResource("2_wes2c")
+region = Rect2(263, 45, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e6op5"]
+atlas = ExtResource("2_wes2c")
+region = Rect2(391, 45, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uy888"]
+atlas = ExtResource("2_wes2c")
+region = Rect2(519, 45, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_essk2"]
+atlas = ExtResource("2_wes2c")
+region = Rect2(647, 45, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_mav75"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1ten6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i5y1c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kbrbg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e6op5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uy888")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_essk2")
+}],
+"loop": true,
+"name": &"staff_animation",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_n3leh"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_71a1t"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7xowi"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(1, 0, 0, 1)
+
+[node name="Enemy" type="CharacterBody2D" groups=["Enemies"]]
+z_index = 1
+position = Vector2(349, 632)
+scale = Vector2(10, 10)
+script = ExtResource("1_nspnv")
+FireProjectileScene = ExtResource("2_e0m01")
+
+[node name="Particles" type="CPUParticles2D" parent="."]
+z_index = 10
+position = Vector2(-0.200001, 0.0999937)
+scale = Vector2(1, 1.71)
+emitting = false
+amount = 200
+lifetime = 0.3
+one_shot = true
+explosiveness = 0.5
+local_coords = true
+direction = Vector2(0, 0)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 10.0
+initial_velocity_max = 40.0
+color = Color(0.635294, 0.176471, 1, 1)
+color_ramp = SubResource("Gradient_2m7tg")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.1, 0.1)
+sprite_frames = SubResource("SpriteFrames_mav75")
+animation = &"staff_animation"
+frame_progress = 0.335527
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(0.272, 0.322)
+shape = SubResource("CircleShape2D_n3leh")
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+custom_minimum_size = Vector2(40, 5)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -4.5
+offset_top = -3.60001
+offset_right = 35.5
+offset_bottom = 1.39999
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.151999, 0.196)
+pivot_offset = Vector2(2, 0)
+size_flags_vertical = 4
+theme_override_styles/background = SubResource("StyleBoxFlat_71a1t")
+theme_override_styles/fill = SubResource("StyleBoxFlat_7xowi")
+value = 100.0
+show_percentage = false
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+avoidance_enabled = true
+debug_enabled = true
+debug_path_custom_color = Color(0, 0.807843, 0.74902, 1)

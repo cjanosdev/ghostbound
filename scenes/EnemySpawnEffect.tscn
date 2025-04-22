@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=3 uid="uid://pojabu1hdvbt"]
+
+[sub_resource type="Gradient" id="Gradient_hg1e6"]
+colors = PackedColorArray(0.800273, 0.624877, 0.985585, 1, 1, 1, 1, 1)
+
+[node name="EnemySpawnEffect" type="Node2D"]
+
+[node name="Particles" type="CPUParticles2D" parent="."]
+z_index = 10
+scale = Vector2(0.2, 0.812)
+emitting = false
+amount = 80
+lifetime = 1.2
+one_shot = true
+explosiveness = 1.0
+local_coords = true
+direction = Vector2(0, 0)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 100.0
+initial_velocity_max = 200.0
+color = Color(0.635294, 0.176471, 1, 1)
+color_ramp = SubResource("Gradient_hg1e6")

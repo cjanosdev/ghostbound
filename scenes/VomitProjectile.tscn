@@ -1,0 +1,82 @@
+[gd_scene load_steps=12 format=3 uid="uid://bdjf10j83sbau"]
+
+[ext_resource type="Script" path="res://scripts/VomitProjectile.cs" id="1_msdtq"]
+[ext_resource type="Texture2D" uid="uid://dpegvqfpbl3ty" path="res://ghost/vomit/vomit_projectile_spsh.png" id="2_2wq2r"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_516m0"]
+radius = 0.729167
+height = 1.5
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q5fai"]
+atlas = ExtResource("2_2wq2r")
+region = Rect2(640, 0, 640, 640)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6pasx"]
+atlas = ExtResource("2_2wq2r")
+region = Rect2(1280, 0, 640, 640)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t54m5"]
+atlas = ExtResource("2_2wq2r")
+region = Rect2(1920, 0, 640, 640)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ev0om"]
+atlas = ExtResource("2_2wq2r")
+region = Rect2(2560, 0, 640, 640)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f7v0v"]
+atlas = ExtResource("2_2wq2r")
+region = Rect2(0, 640, 640, 640)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gaka4"]
+atlas = ExtResource("2_2wq2r")
+region = Rect2(640, 640, 640, 640)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a5f0p"]
+atlas = ExtResource("2_2wq2r")
+region = Rect2(1280, 640, 640, 640)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_seeq7"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q5fai")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6pasx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t54m5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ev0om")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f7v0v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gaka4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a5f0p")
+}],
+"loop": true,
+"name": &"vomit_animation",
+"speed": 5.0
+}]
+
+[node name="VomitProjectile" type="Area2D"]
+script = ExtResource("1_msdtq")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(13, -9)
+scale = Vector2(40, 96)
+shape = SubResource("CapsuleShape2D_516m0")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(13, -10)
+scale = Vector2(0.2, 0.2)
+sprite_frames = SubResource("SpriteFrames_seeq7")
+animation = &"vomit_animation"
+frame = 3
+
+[node name="Timer" type="Timer" parent="."]

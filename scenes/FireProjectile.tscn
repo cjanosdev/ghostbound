@@ -1,0 +1,82 @@
+[gd_scene load_steps=12 format=3 uid="uid://rk28563dwav0"]
+
+[ext_resource type="Script" path="res://scripts/FireProjectile.cs" id="1_4vsei"]
+[ext_resource type="Texture2D" uid="uid://b7dxhxp6nu8sk" path="res://enemy/vomit_projectile_spsh_red.png" id="2_t018k"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_j2quu"]
+radius = 1.04668
+height = 6.2801
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dnn15"]
+atlas = ExtResource("2_t018k")
+region = Rect2(640, 0, 640, 640)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yfjig"]
+atlas = ExtResource("2_t018k")
+region = Rect2(1280, 0, 640, 640)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fpwgw"]
+atlas = ExtResource("2_t018k")
+region = Rect2(1920, 0, 640, 640)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dvxsh"]
+atlas = ExtResource("2_t018k")
+region = Rect2(2560, 0, 640, 640)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cg541"]
+atlas = ExtResource("2_t018k")
+region = Rect2(0, 640, 640, 640)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dj16o"]
+atlas = ExtResource("2_t018k")
+region = Rect2(640, 640, 640, 640)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_63yyb"]
+atlas = ExtResource("2_t018k")
+region = Rect2(1280, 640, 640, 640)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_seeq7"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dnn15")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yfjig")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fpwgw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dvxsh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cg541")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dj16o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_63yyb")
+}],
+"loop": true,
+"name": &"fire_animation",
+"speed": 5.0
+}]
+
+[node name="FireProjectile" type="Area2D"]
+script = ExtResource("1_4vsei")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(4, -8)
+scale = Vector2(28, 20)
+shape = SubResource("CapsuleShape2D_j2quu")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(5, -8)
+scale = Vector2(0.2, 0.2)
+sprite_frames = SubResource("SpriteFrames_seeq7")
+animation = &"fire_animation"
+frame = 3
+
+[node name="Timer" type="Timer" parent="."]
