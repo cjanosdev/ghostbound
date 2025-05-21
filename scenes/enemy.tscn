@@ -123,7 +123,7 @@ bg_color = Color(1, 0, 0, 1)
 z_index = 1
 position = Vector2(256, 824)
 collision_layer = 4
-collision_mask = 10
+collision_mask = 202
 motion_mode = 1
 wall_min_slide_angle = 0.0
 script = ExtResource("1_nspnv")
@@ -155,7 +155,7 @@ position = Vector2(-5, 6)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_lwi7s")
 animation = &"idle"
-frame_progress = 0.567795
+frame_progress = 0.41399
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-4, 10)
