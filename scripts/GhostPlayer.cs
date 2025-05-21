@@ -3,7 +3,7 @@ using System;
 
 public partial class GhostPlayer : CharacterBody2D
 {
-	public const float Speed = 300.0f;
+	public const float Speed = 400.0f;
 
 	private AnimatedSprite2D _animatedSprite;
 
@@ -89,39 +89,38 @@ public partial class GhostPlayer : CharacterBody2D
 		}
 
 		// Handle attack input
-		if (Input.IsActionJustPressed("attack") && _projectileCooldownTimer <= 0f)
+		// if (Input.IsActionJustPressed("attack") && _projectileCooldownTimer <= 0f)
+		if (Input.IsActionJustPressed("shoot_mouse") && _projectileCooldownTimer <= 0f)
 		{
 			_isVomiting = true;
 			ShootProjectile();
 			_projectileCooldownTimer = ProjectileCooldown;
 
 			// Unlock controls after a short time (match your vomit animation duration)
-			GetTree().CreateTimer(0.4f).Timeout += () => _isVomiting = false;
+			GetTree().CreateTimer(0.6f).Timeout += () => _isVomiting = false;
 		}
 
 		MoveAndSlide();
 	}
 
-	private void PlayVomitAnimation()
+	private void PlayVomitAnimation(Vector2 direction)
 	{
-		 if (_lastDirection.Y < 0)
-		{
-			_animatedSprite.Play("vomit_backward");
-		}
-		else if (_lastDirection.Y > 0)
-		{
-			_animatedSprite.Play("vomit_forward");
-		}
-		else if (_lastDirection.X < 0)
-		{
-			_animatedSprite.FlipH = false; // just in case
-			_animatedSprite.Play("vomit_left");
-		}
-		else if (_lastDirection.X > 0)
-		{
-			_animatedSprite.FlipH = false; // not flipped if you have a dedicated right anim
-			_animatedSprite.Play("vomit_right");
-		}
+		direction = direction.Normalized();
+    	float angle = direction.Angle();
+
+		// Normalize to [0, 2π)
+		if (angle < 0)
+			angle += Mathf.Tau;
+
+		// Choose the closest matching animation quadrant
+		if (angle >= 7 * Mathf.Pi / 4 || angle < Mathf.Pi / 4)
+			_animatedSprite.Play("vomit_right");      // Facing right
+		else if (angle >= Mathf.Pi / 4 && angle < 3 * Mathf.Pi / 4)
+			_animatedSprite.Play("vomit_forward");    // Facing down
+		else if (angle >= 3 * Mathf.Pi / 4 && angle < 5 * Mathf.Pi / 4)
+			_animatedSprite.Play("vomit_left");       // Facing left
+		else
+			_animatedSprite.Play("vomit_backward");   // Facing up
 	}
 
 	private void ShootProjectile()
@@ -133,20 +132,45 @@ public partial class GhostPlayer : CharacterBody2D
 		}
 
 		// Play the vomit animation
-    	PlayVomitAnimation();
+    	//PlayVomitAnimation();
+		PlayDamageSound();
 
-		GetTree().CreateTimer(0.2f).Timeout += () =>
+		GetTree().CreateTimer(0.4f).Timeout += () =>
 		{
 			var projectile = VomitProjectileScene.Instantiate<VomitProjectile>();
-			Vector2 direction = _lastDirection != Vector2.Zero ? _lastDirection.Normalized() : Vector2.Right;
+			// Vector2 direction = _lastDirection != Vector2.Zero ? _lastDirection.Normalized() : Vector2.Right;
+
+			Vector2 mousePos = GetGlobalMousePosition();
+			Vector2 direction = (mousePos - GlobalPosition).Normalized();
+
+
+			// ✅ Play vomit animation facing the direction
+        	PlayVomitAnimation(direction);
 
 			Vector2 spawnOffset = direction * 75f;
 			projectile.Position = GlobalPosition + spawnOffset;
 			projectile.SetDirection(direction);
 
 			GetTree().CurrentScene.AddChild(projectile);
+
+			// Auto-clean the projectile after 3 seconds
+            GetTree().CreateTimer(1.0).Timeout += () =>
+            {
+                if (IsInstanceValid(projectile))
+                    projectile.QueueFree();
+            };
 		};
 	}
+
+	 private void PlayDamageSound()
+    {
+        var hitSFX = GD.Load<AudioStream>("res://sounds/ghastly_vomit.mp3");
+        var player = new AudioStreamPlayer();
+        player.Stream = hitSFX;
+        AddChild(player);
+        player.Play();
+        player.Finished += () => player.QueueFree();
+    }
 
 	public void TakeDamage(int amount)
 	{

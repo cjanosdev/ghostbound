@@ -4,9 +4,9 @@ using System.Collections.Generic;
 public partial class RoundManager : Node
 {
     [Export] public NodePath EnemySpawnerPath;
-    [Export] public int InitialRoundTime = 30;
-    [Export] public float SpawnInterval = 1.5f;
-    [Export] public int PreparationTime = 3;
+    [Export] public int InitialRoundTime = 20;
+    [Export] public float SpawnInterval = 2.5f;
+    [Export] public int PreparationTime = 8;
 	[Export] public NodePath FlickerOverlayPath;
 	[Export] public NodePath CameraPath;
 
@@ -20,9 +20,12 @@ private Camera2D _camera;
     private Timer _roundTimer;
     private Timer _spawnTimer;
 
-    private int _currentRound = 0;
+    private int _currentRound = 1;
+	private int _currentBadProgress = 0;
+	private int _currentGoodProgress = 0;
     private float _timeLeft = 0;
     private bool _roundActive = false;
+	private bool _firstRound = true;
 
 
 	public static RoundManager Instance { get; private set; }
@@ -57,7 +60,19 @@ private Camera2D _camera;
 	  private void StartPreparationPhase()
     {
         _roundActive = false;
-        GameManager.Instance?.AdvanceRound(_currentRound);
+		if (!_firstRound)
+		{
+			GD.Print($"in prep phase the current round is {_currentRound} and current good progress is {_currentGoodProgress}");
+			_currentRound += 1;
+			_currentGoodProgress += 34;
+			if (_currentGoodProgress >= 100)
+			{
+				// change to win screen
+				GetTree().ChangeSceneToFile("res://scenes/GoodPlaceBackground.tscn");
+			}
+			GD.Print($"Advancing round to {_currentRound} and good progress to {_currentGoodProgress}!");
+			GameManager.Instance?.AdvanceRound(_currentRound, _currentGoodProgress);
+		}
 
         GD.Print($"🛒 Preparation phase before Round {_currentRound} begins.");
         // You could enable the Veiled Vender here
@@ -86,6 +101,7 @@ private Camera2D _camera;
 	  private void OnRoundTimerFinished()
     {
         GD.Print($"✅ Round {_currentRound} complete!");
+		_firstRound = false;
 
         _roundActive = false;
         _spawnTimer.Stop();
@@ -93,7 +109,7 @@ private Camera2D _camera;
 		 // 🔊 Play spooky ghost cleanup sound
     	PlayGhostlyCleanupSFX();
 
-		ScreenShake(3.0f, 30f);
+		ScreenShake(1.0f, 5f);
     	FlickerScreenEffect();
 
         // Optional: Clean up lingering enemies or let them stay
@@ -110,12 +126,10 @@ private Camera2D _camera;
 					GD.PrintErr($"⚠️ Node in 'Enemies' group is not a SwarmingEnemy: {node}");
 				}
 		}
-
-
         StartPreparationPhase(); // Begin next round after intermission
     }
 
-	private async void ScreenShake(float duration = 3.0f, float intensity = 50f)
+	private async void ScreenShake(float duration = 3.0f, float intensity = 15f)
 	{
 		if (_camera == null)
 		{
@@ -174,10 +188,10 @@ private Camera2D _camera;
     {
         if (_enemySpawner == null) return;
 
-       Vector2 spawnPosition = GetValidSpawnPosition();
-		_enemySpawner.SpawnEnemy(spawnPosition);
+		// Let EnemySpawner manage which spawn point to use
+		_enemySpawner.SpawnNextEnemy(_currentRound);
 
-		PlayEnemySpawnSFX(spawnPosition);
+		PlayEnemySpawnSFX(_enemySpawner.LastSpawnPosition);
     }
 
 	private void PlayNewRoundSFX()
@@ -207,43 +221,27 @@ private Camera2D _camera;
 		player.Finished += () => player.QueueFree();
 	}
 
-    private Vector2 GetRandomSpawnPosition()
-    {
-        // Customize this with better logic/spawn zones
-        return new Vector2(GD.Randf() * 800, GD.Randf() * 800);
-    }
-
-	private Vector2 GetValidSpawnPosition()
+	public void IncrementBadProgress(int amount)
 	{
-		int maxTries = 10;
-		float minDistance = 80f;
+		_currentBadProgress += amount;
+		_currentBadProgress = Mathf.Min(_currentBadProgress, 100);
 
-		for (int i = 0; i < maxTries; i++)
+		HUD.Instance?.UpdateBadBar(_currentBadProgress);
+
+		if (_currentBadProgress >= 100)
 		{
-			Vector2 tryPos = GetRandomSpawnPosition();
-			bool tooClose = false;
-
-			foreach (Node node in GetTree().GetNodesInGroup("Enemies"))
-			{
-				if (node is Node2D existing)
-				{
-					if (existing.GlobalPosition.DistanceTo(tryPos) < minDistance)
-					{
-						tooClose = true;
-						break;
-					}
-				}
-			}
-
-			if (!tooClose)
-				return tryPos;
+			GD.Print("💀 Too many enemies escaped. Game over!");
+			GetTree().ChangeSceneToFile("res://scenes/BadPlaceBackground.tscn");
 		}
-
-		// If we couldn't find a safe spot, just return a random one
-		return GetRandomSpawnPosition();
 	}
 
 
-
 	public int GetRound() => _currentRound;
+
+	public int GetGoodBarProgress() => _currentGoodProgress;
+
+	public int GetBadBarProgress() => _currentBadProgress;
+
+	public bool IsRoundActive() => _roundActive;
+
 }

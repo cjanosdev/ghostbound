@@ -5,7 +5,7 @@
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_516m0"]
 radius = 0.729167
-height = 1.5
+height = 4.02484
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_q5fai"]
 atlas = ExtResource("2_2wq2r")
@@ -65,18 +65,22 @@ animations = [{
 }]
 
 [node name="VomitProjectile" type="Area2D"]
+scale = Vector2(0.2, 0.2)
+collision_layer = 9
+collision_mask = 4
 script = ExtResource("1_msdtq")
+Speed = 300.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(13, -9)
-scale = Vector2(40, 96)
+scale = Vector2(181.6, 161)
 shape = SubResource("CapsuleShape2D_516m0")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(13, -10)
-scale = Vector2(0.2, 0.2)
 sprite_frames = SubResource("SpriteFrames_seeq7")
 animation = &"vomit_animation"
 frame = 3
 
 [node name="Timer" type="Timer" parent="."]
+one_shot = true

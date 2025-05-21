@@ -10,6 +10,8 @@ public partial class FireProjectile : Area2D
 
     public override void _Ready()
     {
+        GD.Print($"🚀 Projectile ready at {GlobalPosition}");
+
         GetNode<Timer>("Timer").Timeout += () => QueueFree();
         BodyEntered += OnBodyEntered;
 
@@ -28,24 +30,8 @@ public partial class FireProjectile : Area2D
     public void SetDirection(Vector2 dir)
     {
          _direction = dir.Normalized();
-
-		// Snap to 4-way
-		if (Mathf.Abs(_direction.X) > Mathf.Abs(_direction.Y))
-		{
-			// Horizontal
-			if (_direction.X > 0)
-				RotationDegrees = -90f; // Right
-			else
-				RotationDegrees = 90f;  // Left
-		}
-		else
-		{
-			// Vertical
-			if (_direction.Y > 0)
-				RotationDegrees = 0f;   // Down
-			else
-				RotationDegrees = 180f; // Up
-		}
+         var sprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+        sprite.Rotation = _direction.Angle() - Mathf.Pi / 2;
     }
 
     private void OnBodyEntered(Node body)

@@ -4,8 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://b7dxhxp6nu8sk" path="res://enemy/vomit_projectile_spsh_red.png" id="2_t018k"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_j2quu"]
-radius = 1.04668
-height = 6.2801
+radius = 4.85714
+height = 31.8
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dnn15"]
 atlas = ExtResource("2_t018k")
@@ -65,6 +65,9 @@ animations = [{
 }]
 
 [node name="FireProjectile" type="Area2D"]
+scale = Vector2(0.2, 0.2)
+collision_layer = 4
+collision_mask = 8
 script = ExtResource("1_4vsei")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -74,9 +77,9 @@ shape = SubResource("CapsuleShape2D_j2quu")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(5, -8)
-scale = Vector2(0.2, 0.2)
 sprite_frames = SubResource("SpriteFrames_seeq7")
 animation = &"fire_animation"
 frame = 3
 
 [node name="Timer" type="Timer" parent="."]
+one_shot = true

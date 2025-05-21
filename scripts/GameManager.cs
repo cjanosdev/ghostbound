@@ -7,17 +7,61 @@ public partial class GameManager : Node2D
     public static GameManager Instance { get; private set; }
 
     private int _playerCurrency = 0;
+    [Export] public NodePath AimCursorPath;
 
     private Dictionary<SwarmingEnemy, int> _enemyHealthMap = new Dictionary<SwarmingEnemy, int>();
     private const int MaxEnemyHealth = 50;
+    private Sprite2D _aimCursor;
 
     public override void _Ready()
     {
         // Singleton setup
         Instance = this;
+
+        // Set custom OS mouse cursor
+        // var cursorTexture = GD.Load<Texture2D>("res://cursors/cursor_ghost.png");
+        // if (cursorTexture != null)
+        //     Input.SetCustomMouseCursor(cursorTexture, Input.CursorShape.Arrow);
+
+        // Optionally hide the OS cursor (if using animated in-world cursor)
+        Input.MouseMode = Input.MouseModeEnum.Hidden;
+
+        // Get the animated in-world cursor sprite
+        if (AimCursorPath != null)
+            _aimCursor = GetNodeOrNull<Sprite2D>(AimCursorPath);
+
         HUD.Instance?.UpdateHealth(GhostPlayer.Instance?.GetHealth() ?? 0);
+        HUD.Instance?.UpdateBadBar(RoundManager.Instance?.GetBadBarProgress() ?? 0);
+        HUD.Instance?.UpdateGoodBar(RoundManager.Instance?.GetGoodBarProgress() ?? 0);
         HUD.Instance?.UpdateCurrency(_playerCurrency);
         HUD.Instance?.UpdateRound(RoundManager.Instance?.GetRound() ?? 0);
+    }
+
+public override void _Input(InputEvent @event)
+{
+    if (@event is InputEventMouseMotion mouseEvent)
+    {
+        // Ensure mouse stays hidden while in game
+        if (GetViewport().GetMousePosition().X < 0 || GetViewport().GetMousePosition().Y < 0)
+        {
+            Input.MouseMode = Input.MouseModeEnum.Visible;
+            if (_aimCursor != null)
+                _aimCursor.Visible = false;
+        }
+        else
+        {
+            Input.MouseMode = Input.MouseModeEnum.Hidden;
+            if (_aimCursor != null)
+                _aimCursor.Visible = true;
+        }
+    }
+}
+
+    public override void _Process(double delta)
+    {
+       // Only update cursor if it's valid
+        if (_aimCursor != null)
+            _aimCursor.GlobalPosition = GetGlobalMousePosition();
     }
 
     public void UnregisterEnemy(SwarmingEnemy enemy)
@@ -43,9 +87,16 @@ public partial class GameManager : Node2D
 
     }
 
+    public void EnemyReachedGoal(SwarmingEnemy enemy)
+    {
+        GD.Print("❗Enemy escaped to the Good Place. Increasing bad progress.");
+
+        RoundManager.Instance?.IncrementBadProgress(20); // you decide how much
+    }
+
     private void GoToGameOver()
     {
-        GetTree().ChangeSceneToFile("res://scenes/GameOver.tscn");
+        GetTree().ChangeSceneToFile("res://scenes/BadPlaceBackground.tscn");
     }
 
     // Register an enemy into the health tracking system
@@ -98,14 +149,22 @@ public partial class GameManager : Node2D
     }
 
     // Advance to the next round
-    public void AdvanceRound(int _currentRound)
+    public void AdvanceRound(int _currentRound, int _currentGoodProgress)
     {
-        _currentRound += 1;
-        GD.Print($"Round is {_currentRound}");
-        HUD.Instance?.UpdateRound(_currentRound);
+            GD.Print($"Round is {_currentRound}");
+            HUD.Instance?.UpdateRound(_currentRound);
 
-        // Optional: Spawn more enemies, scale difficulty, etc.
-        GD.Print($"Advanced to Round {_currentRound}!");
+            // sruvived another round update good progress
+            AdvanceGoodProgress(_currentGoodProgress);
+
+            // Optional: Spawn more enemies, scale difficulty, etc.
+            GD.Print($"Advanced to Round {_currentRound}!");
+    }
+
+    public void AdvanceGoodProgress(int _currentGoodProgress)
+    {
+        GD.Print($"Good progress advanced to {_currentGoodProgress}");
+        HUD.Instance?.UpdateGoodBar(_currentGoodProgress);
     }
 
     // Manual refresh if needed
@@ -115,5 +174,7 @@ public partial class GameManager : Node2D
         HUD.Instance?.UpdateHealth(GhostPlayer.Instance?.GetHealth() ?? 0);
         HUD.Instance?.UpdateCurrency(_playerCurrency);
         HUD.Instance?.UpdateRound(RoundManager.Instance?.GetRound() ?? 0);
+        HUD.Instance?.UpdateGoodBar(RoundManager.Instance?.GetGoodBarProgress() ?? 0);
+        HUD.Instance?.UpdateBadBar(RoundManager.Instance?.GetBadBarProgress() ?? 0);
     }
 }

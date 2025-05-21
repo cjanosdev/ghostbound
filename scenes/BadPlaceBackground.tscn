@@ -1,0 +1,91 @@
+[gd_scene load_steps=12 format=3 uid="uid://cuch1hta68c8a"]
+
+[ext_resource type="Script" path="res://scripts/ParallaxBackground.cs" id="1_evgku"]
+[ext_resource type="Script" path="res://scenes/BadPlaceBackground.cs" id="1_samlf"]
+[ext_resource type="Texture2D" uid="uid://difog7h7no610" path="res://textures/paralax/badplace/badplace_background.png" id="2_sh4mi"]
+[ext_resource type="Texture2D" uid="uid://ucoo8qjaboxp" path="res://textures/paralax/badplace/badplace_arch.png" id="3_0dbbq"]
+[ext_resource type="Texture2D" uid="uid://dg6otlhrd70mb" path="res://textures/paralax/badplace/badplace_gate.png" id="4_ec8ic"]
+[ext_resource type="Texture2D" uid="uid://dbqqpfwtox7gs" path="res://textures/paralax/badplace/badplace_ghost.png" id="5_d14py"]
+[ext_resource type="FontFile" uid="uid://bys7bjj4b6i8w" path="res://fonts/Pixel Game.otf" id="6_j3tcs"]
+[ext_resource type="Texture2D" uid="uid://2edv3ob005gu" path="res://play_btn.png" id="7_kmbto"]
+
+[sub_resource type="FontVariation" id="FontVariation_fq4pw"]
+base_font = ExtResource("6_j3tcs")
+
+[sub_resource type="FontVariation" id="FontVariation_roqex"]
+base_font = ExtResource("6_j3tcs")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vrdun"]
+
+[node name="BadPlaceBackground" type="Node2D"]
+script = ExtResource("1_samlf")
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+script = ExtResource("1_evgku")
+
+[node name="LayerSky" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0, 0.1)
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxBackground/LayerSky"]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("2_sh4mi")
+
+[node name="LayerHeaveArchitecture" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0, 0.3)
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxBackground/LayerHeaveArchitecture"]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("3_0dbbq")
+
+[node name="LayerWelcomePlatform" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0, 0.5)
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxBackground/LayerWelcomePlatform"]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("4_ec8ic")
+
+[node name="LayerForeground" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2(0, 1)
+
+[node name="TextureRect" type="TextureRect" parent="ParallaxBackground/LayerForeground"]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("5_d14py")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+offset_left = 528.0
+offset_top = 926.0
+offset_right = 1497.0
+offset_bottom = 1088.0
+theme_override_colors/font_color = Color(0.981094, 0.960766, 0.993929, 1)
+theme_override_colors/font_shadow_color = Color(0.984314, 0, 0.141176, 1)
+theme_override_colors/font_outline_color = Color(0.984314, 0, 0, 1)
+theme_override_fonts/font = SubResource("FontVariation_fq4pw")
+theme_override_font_sizes/font_size = 75
+text = "You have proven your spirit false.
+Welcome to the BAD PLACE!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Play" type="Button" parent="CanvasLayer"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 216.0
+offset_top = 549.0
+offset_right = 1248.0
+offset_bottom = 1581.0
+grow_horizontal = 2
+scale = Vector2(0.32, 0.32)
+theme_override_fonts/font = SubResource("FontVariation_roqex")
+theme_override_font_sizes/font_size = 300
+theme_override_styles/focus = SubResource("StyleBoxEmpty_vrdun")
+text = "Play"
+icon = ExtResource("7_kmbto")
+flat = true
+icon_alignment = 1

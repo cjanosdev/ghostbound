@@ -1,0 +1,40 @@
+private void AttemptAttack()
+{
+    _attackTimer = AttackCooldown;
+    _isFiring = true;
+    _isAttacking = true;
+
+    PlayFireAnimation();
+
+    // Delay projectile spawn to match animation timing
+    GetTree().CreateTimer(0.2f).Timeout += () =>
+    {
+        if (FireProjectileScene == null)
+        {
+            GD.PrintErr("❌ FireProjectileScene not assigned!");
+            return;
+        }
+
+        var projectile = FireProjectileScene.Instantiate<FireProjectile>();
+        Vector2 direction = _lastDirection != Vector2.Zero ? _lastDirection.Normalized() : Vector2.Right;
+        projectile.Position = GlobalPosition + direction * ProjectileSpawnOffset;
+        projectile.SetDirection(direction);
+
+        GetTree().CurrentScene.AddChild(projectile);
+
+        // Auto-clean the projectile after 3 seconds
+        GetTree().CreateTimer(3.0).Timeout += () =>
+        {
+            if (IsInstanceValid(projectile))
+                projectile.QueueFree();
+        };
+    };
+
+    // Reset attack state after cooldown period
+    GetTree().CreateTimer(1.0f).Timeout += () =>
+    {
+        _isFiring = false;
+        _isAttacking = false;
+        _animatedSprite.Stop();
+    };
+}

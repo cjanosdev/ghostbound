@@ -1,63 +1,109 @@
-[gd_scene load_steps=15 format=3 uid="uid://53gm78f6wjmw"]
+[gd_scene load_steps=23 format=3 uid="uid://53gm78f6wjmw"]
 
 [ext_resource type="Script" path="res://scripts/RangedSwarmingEnemy.cs" id="1_nspnv"]
 [ext_resource type="PackedScene" uid="uid://rk28563dwav0" path="res://scenes/FireProjectile.tscn" id="2_e0m01"]
-[ext_resource type="Texture2D" uid="uid://dxsmei6g5vrg" path="res://enemy/enemy_sprite_sheet_no_flame.png" id="2_wes2c"]
+[ext_resource type="Texture2D" uid="uid://chaglqv7i6n6v" path="res://enemy/Wizard_Scholar/Sprite Sheet/W_Red_ATK_SPR.png" id="3_1iak2"]
+[ext_resource type="Texture2D" uid="uid://bbcta0ig4ff1p" path="res://enemy/dark_mage/right/tile000.png" id="4_jr424"]
+[ext_resource type="Texture2D" uid="uid://jm5woxyagwjy" path="res://enemy/dark_mage/right/tile001.png" id="5_sp1el"]
+[ext_resource type="Texture2D" uid="uid://kgfg7ogh05ws" path="res://enemy/dark_mage/right/tile002.png" id="6_18bbc"]
+[ext_resource type="Texture2D" uid="uid://gwmdwq572ria" path="res://enemy/dark_mage/right/tile003.png" id="7_mml3m"]
+[ext_resource type="Texture2D" uid="uid://c618cdejyfyv6" path="res://enemy/dark_mage/right/tile004.png" id="8_xdqg3"]
+[ext_resource type="Texture2D" uid="uid://culjllrgg1i4r" path="res://enemy/Wizard_Scholar/Sprite Sheet/W_Red_Idle_SPR.png" id="9_aqv31"]
 
 [sub_resource type="Gradient" id="Gradient_2m7tg"]
 colors = PackedColorArray(0.800273, 0.624877, 0.985585, 1, 1, 1, 1, 1)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_1ten6"]
-atlas = ExtResource("2_wes2c")
-region = Rect2(7, 45, 64, 64)
+[sub_resource type="AtlasTexture" id="AtlasTexture_2jlgq"]
+atlas = ExtResource("3_1iak2")
+region = Rect2(0, 0, 50, 50)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_i5y1c"]
-atlas = ExtResource("2_wes2c")
-region = Rect2(135, 45, 64, 64)
+[sub_resource type="AtlasTexture" id="AtlasTexture_o2nwd"]
+atlas = ExtResource("3_1iak2")
+region = Rect2(50, 0, 50, 50)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_kbrbg"]
-atlas = ExtResource("2_wes2c")
-region = Rect2(263, 45, 64, 64)
+[sub_resource type="AtlasTexture" id="AtlasTexture_fdbhi"]
+atlas = ExtResource("3_1iak2")
+region = Rect2(100, 0, 50, 50)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_e6op5"]
-atlas = ExtResource("2_wes2c")
-region = Rect2(391, 45, 64, 64)
+[sub_resource type="AtlasTexture" id="AtlasTexture_6ft32"]
+atlas = ExtResource("3_1iak2")
+region = Rect2(150, 0, 50, 50)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_uy888"]
-atlas = ExtResource("2_wes2c")
-region = Rect2(519, 45, 64, 64)
+[sub_resource type="AtlasTexture" id="AtlasTexture_35o1w"]
+atlas = ExtResource("3_1iak2")
+region = Rect2(200, 0, 50, 50)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_essk2"]
-atlas = ExtResource("2_wes2c")
-region = Rect2(647, 45, 64, 64)
+[sub_resource type="AtlasTexture" id="AtlasTexture_badxx"]
+atlas = ExtResource("9_aqv31")
+region = Rect2(0, 0, 50, 50)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_mav75"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ubfax"]
+atlas = ExtResource("9_aqv31")
+region = Rect2(50, 0, 50, 50)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tosaw"]
+atlas = ExtResource("9_aqv31")
+region = Rect2(100, 0, 50, 50)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_lwi7s"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_1ten6")
+"texture": SubResource("AtlasTexture_2jlgq")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_i5y1c")
+"texture": SubResource("AtlasTexture_o2nwd")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_kbrbg")
+"texture": SubResource("AtlasTexture_fdbhi")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_e6op5")
+"texture": SubResource("AtlasTexture_6ft32")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_uy888")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_essk2")
+"texture": SubResource("AtlasTexture_35o1w")
 }],
 "loop": true,
-"name": &"staff_animation",
+"name": &"attack_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_jr424")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_sp1el")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_18bbc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_mml3m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_xdqg3")
+}],
+"loop": true,
+"name": &"attack_right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_badxx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ubfax")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tosaw")
+}],
+"loop": true,
+"name": &"idle",
 "speed": 5.0
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_n3leh"]
+radius = 36.9151
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_71a1t"]
 content_margin_left = 0.0
@@ -75,15 +121,21 @@ bg_color = Color(1, 0, 0, 1)
 
 [node name="Enemy" type="CharacterBody2D" groups=["Enemies"]]
 z_index = 1
-position = Vector2(349, 632)
-scale = Vector2(10, 10)
+position = Vector2(256, 824)
+collision_layer = 4
+collision_mask = 10
+motion_mode = 1
+wall_min_slide_angle = 0.0
 script = ExtResource("1_nspnv")
 FireProjectileScene = ExtResource("2_e0m01")
+MoveSpeed = 400.0
+BaseHealth = 30
+HealthPerRound = 10
 
 [node name="Particles" type="CPUParticles2D" parent="."]
 z_index = 10
 position = Vector2(-0.200001, 0.0999937)
-scale = Vector2(1, 1.71)
+scale = Vector2(1, 1.709)
 emitting = false
 amount = 200
 lifetime = 0.3
@@ -99,13 +151,15 @@ color = Color(0.635294, 0.176471, 1, 1)
 color_ramp = SubResource("Gradient_2m7tg")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-scale = Vector2(0.1, 0.1)
-sprite_frames = SubResource("SpriteFrames_mav75")
-animation = &"staff_animation"
-frame_progress = 0.335527
+position = Vector2(-5, 6)
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_lwi7s")
+animation = &"idle"
+frame_progress = 0.567795
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-scale = Vector2(0.272, 0.322)
+position = Vector2(-4, 10)
+scale = Vector2(0.84001, 0.83999)
 shape = SubResource("CircleShape2D_n3leh")
 
 [node name="HealthBar" type="ProgressBar" parent="."]
@@ -113,13 +167,13 @@ custom_minimum_size = Vector2(40, 5)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -4.5
-offset_top = -3.60001
-offset_right = 35.5
-offset_bottom = 1.39999
+offset_left = -17.0
+offset_top = -26.0
+offset_right = 23.0
+offset_bottom = -21.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(0.151999, 0.196)
+scale = Vector2(0.776, 1)
 pivot_offset = Vector2(2, 0)
 size_flags_vertical = 4
 theme_override_styles/background = SubResource("StyleBoxFlat_71a1t")
@@ -127,7 +181,13 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_7xowi")
 value = 100.0
 show_percentage = false
 
-[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+[node name="NavAgent" type="NavigationAgent2D" parent="."]
+path_desired_distance = 30.0
+target_desired_distance = 30.0
+navigation_layers = 33
+path_postprocessing = 1
+simplify_path = true
 avoidance_enabled = true
-debug_enabled = true
-debug_path_custom_color = Color(0, 0.807843, 0.74902, 1)
+avoidance_layers = 2
+avoidance_mask = 2
+debug_path_custom_color = Color(1, 0.0784314, 0, 1)

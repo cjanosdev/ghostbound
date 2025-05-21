@@ -5,9 +5,11 @@ public partial class HUD : CanvasLayer
 {
     private Label _roundLabel;
 
-     private Label _roundCountdownLabel;
+    private Label _roundCountdownLabel;
     private Label _currencyLabel;
     private TextureProgressBar _healthBar;
+    private TextureProgressBar _badBar;
+    private TextureProgressBar _goodBar;
 
 
     private TextureButton _ability1;
@@ -28,6 +30,8 @@ public partial class HUD : CanvasLayer
         _roundCountdownLabel = GetNodeOrNull<Label>("TopBar/RoundCountdownLabel");
         _currencyLabel = GetNodeOrNull<Label>("BottomBar/CurrencyDisplay/CurrencyLabel");
         _healthBar = GetNodeOrNull<TextureProgressBar>("BottomBar/HealthBar");
+        _badBar = GetNodeOrNull<TextureProgressBar>("BadContainer/BadBar");
+        _goodBar = GetNodeOrNull<TextureProgressBar>("GoodContainer/GoodBar");
 
         _ability1 = GetNodeOrNull<TextureButton>("BottomBar/AbilityBar/Ability1");
         _ability2 = GetNodeOrNull<TextureButton>("BottomBar/AbilityBar/Ability2");
@@ -38,6 +42,8 @@ public partial class HUD : CanvasLayer
         GD.Print(_roundLabel == null ? "❌ RoundLabel NOT FOUND" : "✅ RoundLabel OK");
         GD.Print(_currencyLabel == null ? "❌ CurrencyLabel NOT FOUND" : "✅ CurrencyLabel OK");
         GD.Print(_healthBar == null ? "❌ HealthBar NOT FOUND" : "✅ HealthBar OK");
+        GD.Print(_badBar == null ? "❌ Bad bar NOT FOUND" : "✅ Bad bar OK");
+        GD.Print(_goodBar == null ? "❌ Good bar NOT FOUND" : "✅ Good bar OK");
         GD.Print(_ability1 == null ? "❌ Ability1 NOT FOUND" : "✅ Ability1 OK");
 
         // Connect button signals safely
@@ -103,6 +109,30 @@ public partial class HUD : CanvasLayer
         {
             var tween = CreateTween();
             tween.TweenProperty(_healthBar, "value", current, 0.3f)
+                 .SetTrans(Tween.TransitionType.Sine)
+                 .SetEase(Tween.EaseType.Out);
+        }
+    }
+
+    public void UpdateBadBar(int current)
+    {
+        GD.Print($"[HUD] Animate Bad bar from {_badBar.Value} to {current}");
+        if (_badBar != null)
+        {
+            var tween = CreateTween();
+            tween.TweenProperty(_badBar, "value", current, 0.3f)
+                 .SetTrans(Tween.TransitionType.Sine)
+                 .SetEase(Tween.EaseType.Out);
+        }
+    }
+
+    public void UpdateGoodBar(int current)
+    {
+        GD.Print($"[HUD] Animate good bar from {_goodBar.Value} to {current}");
+        if (_goodBar != null)
+        {
+            var tween = CreateTween();
+            tween.TweenProperty(_goodBar, "value", current, 0.3f)
                  .SetTrans(Tween.TransitionType.Sine)
                  .SetEase(Tween.EaseType.Out);
         }

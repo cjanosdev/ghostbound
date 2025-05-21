@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bj6whkth4iq0y"]
+[gd_scene load_steps=13 format=3 uid="uid://bj6whkth4iq0y"]
 
 [ext_resource type="Script" path="res://scripts/HUD.cs" id="1_bcot4"]
 [ext_resource type="Texture2D" uid="uid://cx7doidacytka" path="res://textures/under_healthbar.png" id="2_d2h8m"]
@@ -6,6 +6,12 @@
 [ext_resource type="Texture2D" uid="uid://jt8ckie66gt7" path="res://textures/true_empty_healthbar.png" id="3_hd4gl"]
 [ext_resource type="Texture2D" uid="uid://catrisorxd2f5" path="res://textures/green_healthbar.png" id="4_afy3f"]
 [ext_resource type="Texture2D" uid="uid://bbl0hlv03cpu7" path="res://textures/abilityImage.png" id="6_tua3m"]
+[ext_resource type="Texture2D" uid="uid://bve0ix2dpi22d" path="res://textures/bars/bad_therm_grey.png" id="7_hjs5i"]
+[ext_resource type="Texture2D" uid="uid://basu8k1sedd6x" path="res://textures/bars/bad_thermo.png" id="8_j8j0n"]
+[ext_resource type="Texture2D" uid="uid://b6wt4lrwxapgd" path="res://textures/bars/bad_therm_red_only.png" id="9_3gmfd"]
+[ext_resource type="Texture2D" uid="uid://btcmby5xiwslx" path="res://textures/bars/good_bar_transparent_gr.png" id="10_hjvqn"]
+[ext_resource type="Texture2D" uid="uid://cwn8emdw0ahow" path="res://textures/bars/good_bar_transparent.png" id="11_hpxv8"]
+[ext_resource type="Texture2D" uid="uid://dju6oqq5v3qw1" path="res://textures/bars/good_bar_golden.png" id="12_4ro4v"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_bcot4")
@@ -82,3 +88,33 @@ texture_normal = ExtResource("6_tua3m")
 [node name="Ability4" type="TextureButton" parent="BottomBar/AbilityBar"]
 layout_mode = 2
 texture_normal = ExtResource("6_tua3m")
+
+[node name="BadContainer" type="HBoxContainer" parent="."]
+offset_left = 1616.0
+offset_top = 8.0
+offset_right = 2640.0
+offset_bottom = 1032.0
+scale = Vector2(0.64, 0.64)
+
+[node name="BadBar" type="TextureProgressBar" parent="BadContainer"]
+layout_mode = 2
+fill_mode = 3
+texture_under = ExtResource("7_hjs5i")
+texture_over = ExtResource("8_j8j0n")
+texture_progress = ExtResource("9_3gmfd")
+texture_progress_offset = Vector2(200, 195)
+
+[node name="GoodContainer" type="HBoxContainer" parent="."]
+offset_left = 1432.0
+offset_right = 2456.0
+offset_bottom = 1536.0
+
+[node name="GoodBar" type="TextureProgressBar" parent="GoodContainer"]
+layout_mode = 2
+fill_mode = 3
+stretch_margin_top = 160
+stretch_margin_bottom = 160
+texture_under = ExtResource("10_hjvqn")
+texture_over = ExtResource("11_hpxv8")
+texture_progress = ExtResource("12_4ro4v")
+texture_progress_offset = Vector2(75, 138)

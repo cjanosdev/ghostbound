@@ -4,9 +4,9 @@ using System;
 public partial class RangedSwarmingEnemy : SwarmingEnemy
 {
     [Export] public PackedScene FireProjectileScene;
-    [Export] public float AttackRange = 900f;
+    [Export] public float AttackRange = 200f;
     [Export] public float AttackCooldown = 1.5f;
-    [Export] public float RetreatDistance = 600f;
+    [Export] public float RetreatDistance = 250f;
     [Export] public float ProjectileSpawnOffset = 50f;
 
     private AnimatedSprite2D _animatedSprite;
@@ -55,6 +55,7 @@ public partial class RangedSwarmingEnemy : SwarmingEnemy
     {
         GD.Print("👻 Revealing enemy through smoke!");
         _animatedSprite.Visible = true;
+        GD.Print($"Global position of enemy is {GlobalPosition}");
     }
 
     public override void _PhysicsProcess(double delta)
@@ -80,7 +81,7 @@ public partial class RangedSwarmingEnemy : SwarmingEnemy
         _isAttacking = true;
 
         PlayFireAnimation();
-
+        PlayDamageSound();
         GetTree().CreateTimer(0.2f).Timeout += () =>
         {
             if (FireProjectileScene == null)
@@ -94,7 +95,17 @@ public partial class RangedSwarmingEnemy : SwarmingEnemy
             projectile.Position = GlobalPosition + direction * ProjectileSpawnOffset;
             projectile.SetDirection(direction);
 
+            GD.Print($"📦 Spawning projectile at {projectile.Position} with dir {direction}");
+
             GetTree().CurrentScene.AddChild(projectile);
+            GD.Print($"🎯 Projectile added to scene: {projectile.Name}");
+
+            // Auto-clean the projectile after 3 seconds
+            GetTree().CreateTimer(1.0).Timeout += () =>
+            {
+                if (IsInstanceValid(projectile))
+                    projectile.QueueFree();
+            };
         };
 
         GetTree().CreateTimer(1.0f).Timeout += () =>
@@ -107,22 +118,48 @@ public partial class RangedSwarmingEnemy : SwarmingEnemy
 
     private void PlayFireAnimation()
     {
-        GD.Print("Enemy attacks!");
-        _animatedSprite.Play("staff_animation");
+        if (_targetPlayer == null)
+        return;
+
+    Vector2 toPlayer = _targetPlayer.GlobalPosition - GlobalPosition;
+    _lastDirection = toPlayer.Normalized();
+
+    string anim = toPlayer.X < 0 ? "attack_left" : "attack_right";
+    // Optional: Confirm animation exists in the sprite's list
+    if (!_animatedSprite.SpriteFrames.HasAnimation(anim))
+    {
+        GD.PrintErr($"❌ Animation '{anim}' not found in AnimatedSprite2D!");
+        return;
+    }
+
+    // Ensure sprite is visible
+    if (!_animatedSprite.Visible)
+    {
+        GD.Print("⚠️ AnimatedSprite2D was hidden during attack. Making it visible.");
+        _animatedSprite.Visible = true;
+    }
+
+    // Play the animation
+    _animatedSprite.Play(anim);
+    _animatedSprite.Frame = 0;
+
+    GD.Print($"🧙‍♂️ Playing fire animation: {anim} | Direction: {_lastDirection}");
     }
 
     protected override bool IsBusy() => _isFiring;
     protected override bool AllowRepositionWhileBusy() => true;
 
-    public void TakeDamage(int amount)
+    public override void TakeDamage(int amount)
     {
         GameManager.Instance?.DamageEnemy(this, amount);
+        base.TakeDamage(amount);            // Handles health + death
         FlashDamageEffect();
+        // PlayHitSound();
     }
 
-    private void PlayHitSound()
+    private void PlayDamageSound()
     {
-        var hitSFX = GD.Load<AudioStream>("res://sounds/hit.wav");
+        var hitSFX = GD.Load<AudioStream>("res://sounds/lazer.mp3");
         var player = new AudioStreamPlayer();
         player.Stream = hitSFX;
         AddChild(player);
@@ -140,18 +177,4 @@ public partial class RangedSwarmingEnemy : SwarmingEnemy
         tween.TweenProperty(_animatedSprite, "modulate", new Color(1, 1, 1, 1), 0.1); // restore
     }
 
-    public void PlayCleanupEffectAndDie()
-    {
-        var tween = CreateTween();
-
-        tween.TweenProperty(this, "modulate:a", 0.0f, 0.5f)
-            .SetTrans(Tween.TransitionType.Sine)
-            .SetEase(Tween.EaseType.In);
-
-        tween.TweenProperty(this, "scale", Vector2.Zero, 0.5f)
-            .SetTrans(Tween.TransitionType.Back)
-            .SetEase(Tween.EaseType.In);
-
-        tween.TweenCallback(Callable.From(() => QueueFree()));
-    }
 }
